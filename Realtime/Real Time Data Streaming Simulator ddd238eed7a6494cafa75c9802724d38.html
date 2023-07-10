@@ -1,0 +1,805 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Real Time Data Streaming Simulator</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ddd238ee-d7a6-494c-afa7-5c9802724d38" class="page sans"><header><h1 class="page-title">Real Time Data Streaming Simulator</h1><p class="page-description"></p></header><div class="page-body"><h2 id="e69215ee-cfb4-4af0-8c38-92d12f60f01b" class="">Project Overview</h2><p id="8e794f55-2b82-45c0-b427-6f817194292c" class="">In this project we are going to build an End to End Data Engineering pipeline which simulates a real time data processing.<div class="indented"><h3 id="b146437f-6c37-4279-82f5-5a15b1f6268f" class="">1. Problem statement</h3><ul id="7d7597ac-9ca0-4add-b868-d9859a22b1ba" class="bulleted-list"><li style="list-style-type:disc">Create a simulator code using python which generates the data. Using Azure services load the data, do transformations using Databricks and store it into a delta gold table.</li></ul><h3 id="37f6c247-5ea0-4312-9725-a34ee5bc61af" class="">2. High level description of the solution</h3><ul id="dec145b4-0b86-474b-a92d-92a59729d0fb" class="bulleted-list"><li style="list-style-type:disc">We have a device which generates the data at particular intervals(assume for every 5 minutes).</li></ul><ul id="30c696c7-90c7-4b89-8865-6a7618032f2b" class="bulleted-list"><li style="list-style-type:disc">Push this data into  Kafka service (Azure EventHub)</li></ul><ul id="d0cd8169-2b22-4604-b6e8-c75f11bd81c5" class="bulleted-list"><li style="list-style-type:disc">Load the data into ADLS using Stream Analytics job.</li></ul><ul id="e9ba27d2-f4da-4634-bcf2-9b47c96f4e34" class="bulleted-list"><li style="list-style-type:disc">When ever data is available in the ADLS, using ADF load the data from ADLS to Azure Databricks. Do the transformations.</li></ul><ul id="097e2ffa-338d-46c3-8063-8a369613aecb" class="bulleted-list"><li style="list-style-type:disc">Connect the Power BI to Databricks for visualization. 📊<figure id="e6962dbe-da83-4c29-9307-bab34a3321f8" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Realtime.jpg"><img style="width:1182px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Realtime.jpg"/></a></figure></li></ul></div></p><h2 id="51e0e639-4559-4bf8-a16a-ebf834cde531" class="">Data Collection and Ingestion</h2><h3 id="910408e6-2b21-466c-ad9b-5a1ef05cd0bb" class="">  1. Data source</h3><ul id="cc68bb93-2920-4cd9-8a46-5f59151d5a92" class="bulleted-list"><li style="list-style-type:disc">Data source is a python code, where we create a Data frame using pandas by loading .csv file<ul id="715747ac-7f37-48e5-978a-f478f9178958" class="bulleted-list"><li style="list-style-type:circle"><strong>Details of the CSV file</strong><ul id="58de8fd3-caf7-4028-be5a-61cd0577f2e7" class="bulleted-list"><li style="list-style-type:square"><strong>Type of Data    : Amazon Product ratings</strong></li></ul><ul id="5eb53f8e-e6e6-4498-8e25-8c2c235b85d5" class="bulleted-list"><li style="list-style-type:square"><strong>Size                   : 1GB</strong></li></ul><ul id="50d1c3b0-a356-4ce3-b9be-5e3bd5f10a57" class="bulleted-list"><li style="list-style-type:square"><strong>No: columns     : 4 ( UserId, ProductId, Rating, Timestamp)</strong></li></ul></li></ul></li></ul><ul id="0db16edf-cce0-4be0-9ef6-52f177e85ea2" class="bulleted-list"><li style="list-style-type:disc">From the data frame, we  are trying to push 1000 records every 3 minute into the Azure Eventhub.</li></ul><ul id="cac93919-a941-45d0-9a41-6bd1643b3f40" class="bulleted-list"><li style="list-style-type:disc">Below is the Python code</li></ul><pre id="474057cf-5a8f-47be-8cf2-b514ae0c35ef" class="code"><code>&#x27;&#x27;&#x27;&#x27;
+ Install the below libraries which are helpful to connect with azure eventhub
+
+1. pip install azure-eventhub
+2. pip install azure-identity
+3. pip install aiohttp
+
+&#x27;&#x27;&#x27;
+# import required modules/libraries
+import pandas as pd
+
+import asyncio
+import pandas as pd
+import json
+import time
+
+from azure.eventhub import EventData
+from azure.eventhub.aio import EventHubProducerClient
+from azure.identity import DefaultAzureCredential
+
+
+connection_str = &#x27;Endpoint=sb://datasimulatornamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=mI8lu/QgcK9L+7p6aXB16JlJwgWwbI72W+AEhA44lU4=&#x27;
+eventhub_name = &#x27;datasimulatoreventhub&#x27;
+
+
+#data file path 
+path = &quot;C:\\Users\\RakeshAnkinapalli\\Downloads\\ratings_Beauty\\ratings_Beauty.csv&quot;
+
+#create dataframe using the given path
+data = pd.read_csv(filepath_or_buffer=path)
+
+#loop to get 1000 records every minute.
+idx = 0
+def get_record(idx):
+    record = data.iloc[idx:(idx+1000)].to_dict(&#x27;records&#x27;)
+    return record
+    
+   
+
+async def main(idx):
+    # Create a producer client to send messages to the event hub.
+    # Specify a connection string to your event hubs namespace and
+    # the event hub name.
+    producer = EventHubProducerClient.from_connection_string(
+        conn_str=connection_str, eventhub_name=eventhub_name
+    )
+    async with producer:
+        # Create a batch.
+        event_data_batch = await producer.create_batch()
+
+        # Add events to the batch.
+        event_data_batch.add(EventData(json.dumps(get_record(idx))))
+        
+
+        # Send the batch of events to the event hub.
+        await producer.send_batch(event_data_batch)
+
+
+
+#infinite loop runs to call the function which push data into eventhub
+#And it sleeps for 1 minute
+while True:
+    asyncio.run(main(idx))
+    time.sleep(60)
+    idx += 1000</code></pre><h3 id="26566bba-7641-4edc-9719-43429183fa92" class="">2. Create Resource Group, Storage Account </h3><ul id="32dbd209-d343-4ffe-8ea4-6312ff4e98b6" class="bulleted-list"><li style="list-style-type:disc">While creating storage account enable hierarchical namespace for ADLS</li></ul><figure id="2da8b24d-bf32-439d-a87e-64d52932c996" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled.png"><img style="width:1130px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled.png"/></a></figure><ul id="7684811a-9e79-4cd8-94d1-3a84a5372f8b" class="bulleted-list"><li style="list-style-type:disc">Create a container called input data</li></ul><figure id="3e5c1366-7e2c-4844-8b62-0065924ca846" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%201.png"><img style="width:1000px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%201.png"/></a></figure><p id="7bab6ad1-07da-4581-a2a6-f297320cefcf" class="">
+</p><h3 id="bab48ef5-5747-4c58-8bae-3964036bfdd0" class="">3. Create Namespace and and EventHub</h3><ul id="52b27ecf-3e29-4c56-9fe7-776d7cb0c4d9" class="bulleted-list"><li style="list-style-type:disc">If you know the fundamentals of Kafka, <ul id="d68eb31c-8fce-4f0f-8c42-b4e8f7a15cef" class="bulleted-list"><li style="list-style-type:circle">namespace → Broker</li></ul><ul id="a6bfbc60-bf99-4c0c-b898-0759de6173e8" class="bulleted-list"><li style="list-style-type:circle">eventhub → Topic</li></ul></li></ul><ul id="adba8c16-fd1e-4a98-93f0-c2278ba8f6b8" class="bulleted-list"><li style="list-style-type:disc">Try to select the location which is near to you.</li></ul><ul id="091c8814-801f-4653-a7a0-28308f6a8f60" class="bulleted-list"><li style="list-style-type:disc">We will confront an option called capture while creating eventhub, which is used to load data into blob or ADLS directly from the eventhub.</li></ul><ul id="d4197c6c-e785-42f7-8105-1e67036a463e" class="bulleted-list"><li style="list-style-type:disc">To use capture we have to upgrade our plan to standard or premium.</li></ul><figure id="c6015ae3-6983-4f63-87b8-a7585eff40d9" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%202.png"><img style="width:1017px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%202.png"/></a></figure><ul id="25f95357-ea59-4bb4-8221-b7ac7475e278" class="bulleted-list"><li style="list-style-type:disc">Create an eventhub.</li></ul><ul id="6093e874-73ae-4dc8-94a8-a6bdcb44990d" class="bulleted-list"><li style="list-style-type:disc">We can have multiple event hubs.</li></ul><ul id="286d6270-5427-4f50-9ba6-3fa5c61b29b0" class="bulleted-list"><li style="list-style-type:disc">To access the eventhub from our python code. We need create a shared access policy for the eventhub.</li></ul><ul id="545bf921-3fca-42fc-a997-731159754049" class="bulleted-list"><li style="list-style-type:disc">Click on eventhub. Go to shared access policy and create a new policy by ticking manage check box.</li></ul><ul id="972de2df-2637-4487-8d67-9968f2f65408" class="bulleted-list"><li style="list-style-type:disc">Here we can get the connection string.</li></ul><figure id="09fa9933-31c0-4caa-a377-5c4cf35632c7" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%203.png"><img style="width:1592px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%203.png"/></a></figure><p id="9d86357e-a76b-47c5-a35a-6c1fe6279e37" class="">
+</p><h3 id="54cd2d11-cd76-44b3-b80a-ac1128b76132" class="">4. Create Stream analytics job</h3><ul id="76fddd5b-83e9-4d11-9b93-1719699f8367" class="bulleted-list"><li style="list-style-type:disc">While creating new analytics job, make use you choose the same region as your namespace.</li></ul><ul id="8e88a8f3-3724-49b9-a96d-d8beb67f1781" class="bulleted-list"><li style="list-style-type:disc">If not job will fail to pick up the streaming data.</li></ul><p id="759c9a7d-b8d6-4d2f-a17e-19c4a313610e" class="">   <strong>Input source configuration</strong><div class="indented"><ul id="35ddb52b-94af-44a1-9e35-c8ddba887584" class="bulleted-list"><li style="list-style-type:disc">Keep authentication mode as Connection string.</li></ul><ul id="63b5b10e-429d-4653-9cd6-3e2234d02133" class="bulleted-list"><li style="list-style-type:disc">For event hub policy use the one which we created initially.</li></ul><p id="ff43daf7-d613-489a-9eee-74fbcd2f2a94" class="">
+</p><figure id="7e3bdcb5-2634-4e8a-8ccf-9416fcaae72f" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%204.png"><img style="width:439px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%204.png"/></a></figure><figure id="4c6c6554-7faf-4cb7-8b5c-84acf22937ef" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%205.png"><img style="width:406px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%205.png"/></a></figure><p id="57dfb1df-6f3b-47df-a18d-e25d10b4780d" class=""><strong>Output source confirguration</strong></p><ul id="59a993e2-681d-4479-9860-10afaf883c81" class="bulleted-list"><li style="list-style-type:disc"></li></ul><figure id="c1e75832-e638-4ad7-af15-6cca2b8141b2" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%206.png"><img style="width:565px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%206.png"/></a></figure><figure id="054d8c88-a6e3-4252-8d3a-fdd886d50086" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%207.png"><img style="width:599px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%207.png"/></a></figure><figure id="3b158f2c-3568-4702-a591-30e07718eebb" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%208.png"><img style="width:567px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%208.png"/></a></figure><h3 id="f2de2e6b-f416-4782-b4c5-e1dd8e2a112e" class="">5. Copy the Connection string into python code</h3><ul id="ef4fe70a-6155-45da-9bef-70ce7add244a" class="bulleted-list"><li style="list-style-type:disc">Go to eventhub namespace</li></ul><ul id="5e8fef90-ba75-4e9c-9148-778c4f3b5dfa" class="bulleted-list"><li style="list-style-type:disc">Click on shared access policies → click on policy</li></ul><ul id="0849d5b2-4a4e-43a7-bd96-6b171333a803" class="bulleted-list"><li style="list-style-type:disc">Copy the connection string primary key</li></ul><ul id="4956f1e2-4dfc-4d84-a0dd-88ceb1326b57" class="bulleted-list"><li style="list-style-type:disc">Run the python code.</li></ul><p id="b34ddb4e-2f37-40f2-9d88-43557f13ac25" class="">
+</p></div></p><ul id="7f2f134f-3c9c-4c33-b40a-32382ba5fa30" class="bulleted-list"><li style="list-style-type:disc">Once we start the stream analytics job. It will create folder with date as name.</li></ul><figure id="1c8ffcd1-0fbc-4a53-8883-3c6c1479e985" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%209.png"><img style="width:1375px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%209.png"/></a></figure><h2 id="08e3edd0-cb5e-4fc8-b90e-aa234f596eb9" class="">Data Transformation in Azure Databricks</h2><h3 id="ca0a95d7-b8dd-4d24-b887-2ced88433477" class="">1.Create Azure Databricks Workspace</h3><figure id="b6983c62-0415-47b3-9d84-18031f6e9dcf" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2010.png"><img style="width:1182px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2010.png"/></a></figure><ul id="60685016-ed8b-4dcc-8412-78da87a63eb3" class="bulleted-list"><li style="list-style-type:disc">Create a notebook and cluster</li></ul><ul id="c345cd0c-3204-4ccf-9a5f-e51b77175626" class="bulleted-list"><li style="list-style-type:disc">Attach cluster to the notebook</li></ul><ul id="379477bf-67a8-4401-905a-9a76356a146a" class="bulleted-list"><li style="list-style-type:disc">Mount the ADLS into notebook.</li></ul><ul id="128df81c-7ac0-41f1-84f7-ffbc68f0e599" class="bulleted-list"><li style="list-style-type:disc">Access key:<ul id="3d7592ab-a4f5-4467-aa02-d6a6a5a7a05b" class="bulleted-list"><li style="list-style-type:circle">Click on storage account→ Under Security + Networking</li></ul><ul id="e1381c4d-398c-45f1-9a10-ff8f6edbe0ec" class="bulleted-list"><li style="list-style-type:circle">Click on Access keys → Get key 1</li></ul></li></ul><pre id="3fddd2e3-9b0c-4003-aa3a-fd0d16fccef5" class="code"><code>&#x27;&#x27;&#x27;
+1.) Mount acts as a pointer to the ADLS. When we mount ADLS at some mount point
+		we can access the files from ADLS as they are in databricks.
+&#x27;&#x27;&#x27;
+dbutils.fs.mount(
+    #wasbs://&lt;container-name&gt;@&lt;storage-account-name&gt;.blob.core.windows.net
+    source=&quot;wasbs://inputdata@endtoendprojectssa.blob.core.windows.net&quot;,
+    mount_point=&quot;/mnt/datasimulator_input_data/&quot;,
+    extra_configs = {
+        
+        #Here we are connecting adls using access key
+        #fs.azure.account.key.&lt;container-name&gt;.blob.core.windows.net : access key from the security+networking section
+        #in storage account
+        &quot;fs.azure.account.key.endtoendprojectssa.blob.core.windows.net&quot;:&quot;LpT3mcJvEYkPkVHIXsqtddddQA+gPn0DTkezIy5yeMxI+2PLgZmOX7G05DcjI//3x+APgKKO9r6h+ASt8qJXBQ==&quot;,
+    }
+)
+
+#import required modules
+import datetime
+from pyspark.sql.functions import to_date,from_unixtime,year,col,count,expr
+
+&#x27;&#x27;&#x27;
+Since the data is available in the folder with today&#x27;s date.
+We have to dynamically pass the today date as folder.
+&#x27;&#x27;&#x27;
+date = datetime.date.today().strftime(&quot;%d-%m-%Y&quot;)
+path = f&quot;/mnt/datasimulator_input_data/stream_input_data/{date}/&quot;
+
+#read data into data frame
+bronze_data = spark.read.json(path=path)
+
+#Convert timestamp into date and extract year from it
+silver_data = bronze_data.select(&quot;ProductId&quot;,&quot;Rating&quot;,&quot;Timestamp&quot;,&quot;UserId&quot;)\
+                            .withColumn(&quot;Year&quot;,year(to_date(from_unixtime(bronze_data.Timestamp))))\
+                                .drop(&quot;Timestamp&quot;)
+
+#Do group by and aggregations to get top 5 years which are getting highest 5 ratings.
+gold_data = silver_data.where(expr(&quot;Rating = 5&quot;)).groupBy(&quot;Year&quot;)\
+                .agg(count(&quot;Rating&quot;).alias(&quot;Total_Ratings&quot;))\
+                    .orderBy(col(&quot;Total_Ratings&quot;).desc()).limit(5)
+
+#Since we need to visualize the data, create a delta table in default database.
+gold_data.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;default.gold_table&quot;)
+
+#Command to unmount the ADLS.
+dbutils.fs.unmount(&quot;/mnt/datasimulator_input_data/&quot;)</code></pre><p id="acbac46a-1979-43f2-8090-014cb3654dbd" class="">
+</p><h3 id="0c54da26-9de3-47ef-81df-60bc50b641c1" class="">Alternate way to connect ADLS to Databricks(Production level use case) using Service Principal.</h3><ul id="da733761-4ee2-4ecd-8d0d-1c9487c5da27" class="bulleted-list"><li style="list-style-type:disc">It is a more secured way to connect ADLS to Databricks.</li></ul><ul id="5638c3ce-824c-47cc-982f-9dfc6291debb" class="bulleted-list"><li style="list-style-type:disc"><strong>Step 1:</strong><ul id="a3666ce7-e287-4c18-845c-1f63f7704932" class="bulleted-list"><li style="list-style-type:circle">Go to Azure Active Directory → Under manage section → Click on App Registration → New Registration.</li></ul><ul id="a2104e88-b5df-4786-bdf4-53067f0efd01" class="bulleted-list"><li style="list-style-type:circle">Give a name and keep other things default → click on Register</li></ul></li></ul><ul id="aad6eab8-1d9f-4df0-84f1-b304cd8d143c" class="bulleted-list"><li style="list-style-type:disc"><strong>Step 2:</strong><ul id="3467bd3c-a8ae-46ab-9074-16086d7cb079" class="bulleted-list"><li style="list-style-type:circle">Click on the created service principal → Go to Certificates &amp; secrets</li></ul><ul id="34efd259-0996-4f77-b7f0-c9e467d1c7f1" class="bulleted-list"><li style="list-style-type:circle">Click new client secret and make use you copy the secret value </li></ul></li></ul><ul id="3266996d-046a-4144-a824-5c4093e48d75" class="bulleted-list"><li style="list-style-type:disc"><strong>Step 3:</strong><ul id="7a4665a2-8cdb-447b-8223-9770cc7120f2" class="bulleted-list"><li style="list-style-type:circle">Go to Storage account → Click on Access Control (IAM)</li></ul><ul id="8d8309ee-42e4-43d9-bc7e-b7549777da12" class="bulleted-list"><li style="list-style-type:circle">Click on Add role assignment → Select Storage Blob Data Contributor</li></ul><ul id="b71761e2-9c67-483c-a543-839899e52c67" class="bulleted-list"><li style="list-style-type:circle">select your ADLS service principle.</li></ul><ul id="80c4f646-cefd-4017-893b-8aecfb7dce18" class="bulleted-list"><li style="list-style-type:circle">Click on Review+Assign</li></ul><figure id="cd84f64b-4e74-468a-bdb6-dc7ece86c269" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2011.png"><img style="width:1904px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2011.png"/></a></figure></li></ul><ul id="e03bf0f2-c9d1-4233-9426-92981f51ebf6" class="bulleted-list"><li style="list-style-type:disc">Step 4:<ul id="5518b0ef-77ca-43d5-a81c-8396e0d9ee75" class="bulleted-list"><li style="list-style-type:circle">Create a Azure Key Vault → Under objects click on secrets.</li></ul><ul id="95c024a1-2099-4389-9e3d-b4280d9b0a0a" class="bulleted-list"><li style="list-style-type:circle">Click on Generate → Add the secret value we created in step2.</li></ul></li></ul><ul id="a37179c0-2ffd-4b3d-b992-4b014c33511e" class="bulleted-list"><li style="list-style-type:disc">Step 5:<ul id="bb30429d-0356-498a-a10f-0ec3e98f1364" class="bulleted-list"><li style="list-style-type:circle">Creating a secret scope for the key in databricks</li></ul><ul id="79a5f9e1-7ec2-469c-9618-b0a058ea3b84" class="bulleted-list"><li style="list-style-type:circle">Add #screts/createScope at the end of the databricks url.</li></ul><ul id="d1a8f3e7-d8ff-45bd-aad9-9cece2152be8" class="bulleted-list"><li style="list-style-type:circle">It will display an UI to create a secret scope</li></ul><ul id="cc3ca4ad-f549-4e69-9acd-0d01c2807d6b" class="bulleted-list"><li style="list-style-type:circle">Fill th details and create a scope.</li></ul><pre id="01999151-a4da-4fbb-8f49-736425e39026" class="code"><code>https://adb-6736124552009880.0.azuredatabricks.net/?o=6736124552009880#secrets/createScope</code></pre></li></ul><ul id="d2010fdc-dff9-4a80-9572-9af1be11b114" class="bulleted-list"><li style="list-style-type:disc">Go to Databricks note book and add the below code to configure connection</li></ul><pre id="1dcbf4b0-16d6-4499-87e1-4888d8ba1025" class="code"><code>service_credential = dbutils.secret.get(scope=&quot;&lt;scope-name&gt;&quot;,key=&quot;&lt;akv-secret-key-name&gt;&quot;)
+
+spark.conf.set(&quot;fs.azure.account.auth.type.&lt;storage-account&gt;.dfs.core.windows.net&quot;, &quot;OAuth&quot;)
+spark.conf.set(&quot;fs.azure.account.oauth.provider.type.&lt;storage-account&gt;.dfs.core.windows.net&quot;, &quot;org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider&quot;)
+spark.conf.set(&quot;fs.azure.account.oauth2.client.id.&lt;storage-account&gt;.dfs.core.windows.net&quot;, &quot;application-id&quot;)
+spark.conf.set(&quot;fs.azure.account.oauth2.client.secret.&lt;storage-account&gt;.dfs.core.windows.net&quot;, service_credential)
+
+#here directory id is id of your service principle
+#Goto Azure Active Directory -&gt; App Registrations -&gt; Owned applications
+#click on your service principle -&gt; Directory(tenant) ID
+spark.conf.set(&quot;fs.azure.account.oauth2.client.endpoint.&lt;storage-account&gt;.dfs.core.windows.net&quot;, &quot;https://login.microsoftonline.com/&lt;directory-id&gt;/oauth2/token&quot;)
+
+df = spark.read.csv(&quot;abfs://&lt;container-name&gt;@&lt;storage-account&gt;.dfs.core.windows.net/&lt;path-to-file&gt;&quot;</code></pre><p id="1d2c720a-1e1f-483c-acc3-f604e43b62ee" class="">Application client Id : b7e1cc64-8582-4711-ac1b-98aa4b400b1f</p><p id="2063708c-d18d-43e1-a5b5-f4fadc345b2c" class="">Directory tenant ID : e5bb132d-326c-406e-b8ed-063546119ae5</p><p id="2ae870d4-5e17-446e-a132-711f6d44a692" class="">secret value : tKL8Q~.KOUs-hh~Dvnux2hws587jYuWtBVdWMdaX</p><p id="0c9b34d7-415d-4b44-bd78-fb34fd6bd4fd" class="">secret id : 4e46a726-8307-4b11-81ed-f3720c1d6614</p><h2 id="29bdae6d-334c-4d7d-94c9-60ad07f62d0d" class="">Connecting Databricks to Power BI</h2><ul id="31e486cb-9044-4014-b284-019add593583" class="bulleted-list"><li style="list-style-type:disc">Download the PowerBI Desktop App or we can directly use in azure as service (PowerBI Embedded)</li></ul><ul id="987405c5-545d-43e4-abea-2618cf22fab4" class="bulleted-list"><li style="list-style-type:disc">Under Home → Click on Get Data → Click on more</li></ul><ul id="2f91934e-3869-4414-aa4f-35a126a202fb" class="bulleted-list"><li style="list-style-type:disc">Select Azure → Databricks</li></ul><figure id="897dbc17-c101-4120-81cc-a15f3dd00e13" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2012.png"><img style="width:1031px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2012.png"/></a></figure><ul id="d91310c4-27af-4620-9fa7-419517bc7e19" class="bulleted-list"><li style="list-style-type:disc">For server Hostname and HTTP path<ul id="8389ab86-583a-46e2-a89b-194aafaf3b68" class="bulleted-list"><li style="list-style-type:circle">Click on compute → Click on your cluster</li></ul><ul id="27e6a6b0-1209-4bec-8fb8-dc9811737628" class="bulleted-list"><li style="list-style-type:circle">At bottom of the page under advanced options we can find these details</li></ul></li></ul><ul id="b0d6af81-6025-4194-8bd5-c9040716258d" class="bulleted-list"><li style="list-style-type:disc">Select Personal Access Token for authentication</li></ul><ul id="26f4ddba-0618-40b8-b6c5-9582709608ee" class="bulleted-list"><li style="list-style-type:disc">To create a Access Token<ul id="d24d109b-26b3-4053-9bbf-c5c3bb231bdc" class="bulleted-list"><li style="list-style-type:circle">Go to Databricks notebook → Click on Azure databricks username on top right corner</li></ul><ul id="1ea3fb12-a0b9-47b8-a62e-d7e89f776578" class="bulleted-list"><li style="list-style-type:circle">On the <strong>Access tokens</strong> tab, click <strong>Generate new token</strong>.</li></ul><ul id="676feaf2-49a3-4c88-87b1-81bd1c6b7c9d" class="bulleted-list"><li style="list-style-type:circle">Make sure you copy and save it some where.</li></ul><p id="7cf92fd2-e208-44f6-9386-c46f1f1f4113" class="">
+</p><figure id="14c4c659-3ec5-4f6c-b1e3-3911309eeb02" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2013.png"><img style="width:1202px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2013.png"/></a></figure><p id="f5859376-aaa6-4f56-9657-1858305f9d9f" class="">
+</p></li></ul><ul id="ec95cb7a-4abd-40ba-980f-239138c42e68" class="bulleted-list"><li style="list-style-type:disc">After second run, refresh the table data.</li></ul><figure id="d1d3e6b0-6f5e-4ea7-addb-c88c0b2d7851" class="image"><a href="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2014.png"><img style="width:1220px" src="Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2014.png"/></a></figure><h2 id="b33a4816-285c-441d-92ad-bb9ae6815382" class="">Conclusion</h2><ul id="b11f6e31-cccd-4399-9e44-3536d6c7128a" class="bulleted-list"><li style="list-style-type:disc">By running the notebook multiple times. We observed that Year 2013 got highest number of 5 ratings.</li></ul><ul id="0dc2a800-d682-40ab-bab5-9fb6d61fa223" class="bulleted-list"><li style="list-style-type:disc">Which indicates the people are happy with the products which are sold in Year 2013.</li></ul><p id="1828abca-229a-4a93-96c4-f188955359bb" class="">
+</p></div></article></body></html>

@@ -16,7 +16,7 @@ In this project we are going to build an End to End Data Engineering pipeline wh
 - When ever data is available in the ADLS, using ADF load the data from ADLS to Azure Databricks. Do the transformations.
 - Connect the Power BI to Databricks for visualization. 📊
     
-    ![Realtime.jpg](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Realtime.jpg)
+    ![Realtime.jpg](https://github.com/Rakeshreddy81423/Projects/blob/main/Streaming%20pipeline/Images/Realtime.jpg)
     
 
 ## Data Collection and Ingestion
@@ -103,7 +103,7 @@ while True:
 
 - Create a container called input data
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%201.png)
+![Untitled](https://github.com/Rakeshreddy81423/Projects/blob/main/Streaming%20pipeline/Images/Untitled_1.png)
 
 ### 3. Create Namespace and and EventHub
 

@@ -16,7 +16,8 @@ In this project we are going to build an End to End Data Engineering pipeline wh
 - When ever data is available in the ADLS, using ADF load the data from ADLS to Azure Databricks. Do the transformations.
 - Connect the Power BI to Databricks for visualization. 📊
     
-    ![Realtime.jpg](https://github.com/Rakeshreddy81423/Projects/blob/main/Streaming%20pipeline/Images/Realtime.jpg)
+  ![Realtime](https://github.com/Rakeshreddy81423/Projects/assets/45210453/5fc179bb-c432-49a2-99fb-0f4924ed54c3)
+
     
 
 ## Data Collection and Ingestion
@@ -99,11 +100,12 @@ while True:
 
 - While creating storage account enable hierarchical namespace for ADLS
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled.png)
+
+<img width="565" alt="Untitled" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/40d707d5-f5d7-4425-ab2f-949766ae9155">
 
 - Create a container called input data
+<img width="500" alt="Untitled_1" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/9d35f464-9746-4209-b61c-ed283eac161e">
 
-![Untitled](https://github.com/Rakeshreddy81423/Projects/blob/main/Streaming%20pipeline/Images/Untitled_1.png)
 
 ### 3. Create Namespace and and EventHub
 
@@ -114,15 +116,17 @@ while True:
 - We will confront an option called capture while creating eventhub, which is used to load data into blob or ADLS directly from the eventhub.
 - To use capture we have to upgrade our plan to standard or premium.
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%202.png)
+<img width="509" alt="Untitled_2" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/ab7dc894-ffff-46f1-90e4-0a63af6b00f0">
+
 
 - Create an eventhub.
 - We can have multiple event hubs.
 - To access the eventhub from our python code. We need create a shared access policy for the eventhub.
 - Click on eventhub. Go to shared access policy and create a new policy by ticking manage check box.
 - Here we can get the connection string.
+  
+![Untitled_3](https://github.com/Rakeshreddy81423/Projects/assets/45210453/916f5b0b-4474-4694-b3f4-774aca2f5726)
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%203.png)
 
 ### 4. Create Stream analytics job
 
@@ -134,19 +138,23 @@ while True:
 - Keep authentication mode as Connection string.
 - For event hub policy use the one which we created initially.
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%204.png)
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%205.png)
+<img width="220" alt="Untitled_4" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/c1581345-7885-4967-80ad-4296bc64d64e">
+
+![Untitled_5](https://github.com/Rakeshreddy81423/Projects/assets/45210453/e109b7c2-aea7-427f-84d0-59f16d0c694b)
+
 
 **Output source confirguration**
 
-- 
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%206.png)
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%207.png)
+<img width="283" alt="Untitled_6" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/2cab46d5-40e9-4e68-8d7c-c0160340bb84">
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%208.png)
+<img width="300" alt="Untitled_7" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/4b6accdd-d40c-4f14-8dbb-7d06fc122cab">
+
+![Untitled_8](https://github.com/Rakeshreddy81423/Projects/assets/45210453/9c2a21cd-b130-4fdc-96b8-5cc4e571b043)
+
+
 
 ### 5. Copy the Connection string into python code
 
@@ -157,13 +165,15 @@ while True:
 
 - Once we start the stream analytics job. It will create folder with date as name.
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%209.png)
+<img width="688" alt="Untitled_9" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/a16e98a6-37c6-4576-ad45-bb2f9c70cf90">
+
 
 ## Data Transformation in Azure Databricks
 
 ### 1.Create Azure Databricks Workspace
+![Untitled_10](https://github.com/Rakeshreddy81423/Projects/assets/45210453/c1e6a98d-784e-4035-b132-2e4646e75429)
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2010.png)
+
 
 - Create a notebook and cluster
 - Attach cluster to the notebook
@@ -236,7 +246,8 @@ dbutils.fs.unmount("/mnt/datasimulator_input_data/")
     - select your ADLS service principle.
     - Click on Review+Assign
     
-    ![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2011.png)
+  ![Untitled_11](https://github.com/Rakeshreddy81423/Projects/assets/45210453/148c15a8-dc46-4613-820a-57eb001238b3)
+
     
 - Step 4:
     - Create a Azure Key Vault → Under objects click on secrets.
@@ -283,7 +294,8 @@ secret id : 4e46a726-8307-4b11-81ed-f3720c1d6614
 - Under Home → Click on Get Data → Click on more
 - Select Azure → Databricks
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2012.png)
+
+<img width="516" alt="Untitled_12" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/daef337a-9e83-4341-bafc-1e3adac0cf79">
 
 - For server Hostname and HTTP path
     - Click on compute → Click on your cluster
@@ -294,11 +306,13 @@ secret id : 4e46a726-8307-4b11-81ed-f3720c1d6614
     - On the **Access tokens** tab, click **Generate new token**.
     - Make sure you copy and save it some where.
     
-    ![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2013.png)
+<img width="601" alt="Untitled_13" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/d4318444-cd44-41d3-8a0e-ec454550e08a">
+
     
 - After second run, refresh the table data.
+- 
+<img width="610" alt="Untitled_14" src="https://github.com/Rakeshreddy81423/Projects/assets/45210453/f87d80bb-c2fa-4f4d-b92b-19b77680dc65">
 
-![Untitled](Real%20Time%20Data%20Streaming%20Simulator%20ddd238eed7a6494cafa75c9802724d38/Untitled%2014.png)
 
 ## Conclusion
 
